@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="roul",
-    version="0.0.1-pre1",
+    version="0.0.1",
     author="DoyunShin",
     author_email="op@doyun.me",
     description="ROUL Library",
