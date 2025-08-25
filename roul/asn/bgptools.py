@@ -12,9 +12,13 @@ import csv
 
 BGP_TOOLS_ASN_URL = "https://bgp.tools/asns.csv"
 BGP_TOOLS_TABLE_URL = "https://bgp.tools/table.jsonl"
-UA = "SPARCS@KAIST sparcs.org - noc@sparcs.net"
+UA = "ORGID orgdomain.net - orgmail@orgdomain.net"
+_ORIGINAL_UA = "ORGID orgdomain.net - orgmail@orgdomain.net"
 
 def update():
+    if UA == _ORIGINAL_UA:
+        raise ValueError("User-Agent has not been set. Please set it to a valid value before calling update()")
+
     asns = get(BGP_TOOLS_ASN_URL, headers={"User-Agent": UA}).text.splitlines()[1:]
     tables = get(BGP_TOOLS_TABLE_URL, headers={"User-Agent": UA}).text.splitlines()
 
@@ -77,7 +81,7 @@ def search_asn_as_ip(ipaddr) -> int:
         return roul.asn.TABLE_IPV6.search_best(ipaddr)
     else:
         raise ValueError("IP address is neither IPv4 nor IPv6")
-    
+
 def search_asn_name(asn: int) -> str:
     """
     Search the name of the given ASN.
