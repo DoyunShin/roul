@@ -41,6 +41,18 @@ def is_ipv6(ipaddr: str | ipaddress.IPv4Address | ipaddress.IPv6Address | ipaddr
     except ValueError:
         return False
 
+def is_private(cidr: str | ipaddress.IPv4Address | ipaddress.IPv6Address):
+    """
+    Check if the IP address is private.
+
+    Args:
+        cidr: The IP address to check.
+
+    Returns:
+        bool: True if the IP address is private, False otherwise.
+    """
+    return ipaddress.ip_address(cidr).is_private
+
 def to_int(ipaddr: str | ipaddress.IPv4Address | ipaddress.IPv6Address):
     return int(ipaddress.ip_address(ipaddr))
 
