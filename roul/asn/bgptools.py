@@ -3,6 +3,7 @@ import roul.ip
 import roul.ip.radix
 import roul.asn
 
+
 from requests import get
 import ipaddress
 import json
@@ -12,15 +13,14 @@ import csv
 
 BGP_TOOLS_ASN_URL = "https://bgp.tools/asns.csv"
 BGP_TOOLS_TABLE_URL = "https://bgp.tools/table.jsonl"
-UA = "ORGID orgdomain.net - orgmail@orgdomain.net"
 _ORIGINAL_UA = "ORGID orgdomain.net - orgmail@orgdomain.net"
 
 def update():
-    if UA == _ORIGINAL_UA:
+    if roul.asn.UA == _ORIGINAL_UA:
         raise ValueError("User-Agent has not been set. Please set it to a valid value before calling update()")
 
-    asns = get(BGP_TOOLS_ASN_URL, headers={"User-Agent": UA}).text.splitlines()[1:]
-    tables = get(BGP_TOOLS_TABLE_URL, headers={"User-Agent": UA}).text.splitlines()
+    asns = get(BGP_TOOLS_ASN_URL, headers={"User-Agent": roul.asn.UA}).text.splitlines()[1:]
+    tables = get(BGP_TOOLS_TABLE_URL, headers={"User-Agent": roul.asn.UA}).text.splitlines()
 
     new_asns: dict[int, str] = {}
     new_table_ipv4 = roul.ip.radix.RadixTree(bit_length=32)
