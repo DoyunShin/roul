@@ -11,6 +11,7 @@ setuptools.setup(
     version="0.1.2",
     author="DoyunShin",
     author_email="op@doyun.me",
+    url="http://github.com/DoyunShin/roul",
     description="ROUL Library",
     long_description=long_description,
     long_description_content_type="text/markdown",
