@@ -179,7 +179,10 @@ class AsnTest(_AsnTestCase):
 
         exported_names = set(namespace) - {"__builtins__"}
         self.assertEqual(exported_names, set(roul.asn.__all__))
-        self.assertEqual(exported_names, {"update", "search_asn_name", "search_asn_as_ip", "ASNS", "TABLE_IPV4", "TABLE_IPV6", "UPDATED_AT", "UA"})
+        self.assertEqual(
+            exported_names,
+            {"update", "search_asn_name", "search_asn_as_ip", "ASNS", "TABLE_IPV4", "TABLE_IPV6", "UPDATED_AT", "UA"},
+        )
         self.assertIs(namespace["ASNS"], roul.asn._snapshot.asns)
         self.assertIs(namespace["TABLE_IPV4"], roul.asn._snapshot.table_ipv4)
         self.assertIs(namespace["TABLE_IPV6"], roul.asn._snapshot.table_ipv6)
@@ -271,7 +274,11 @@ class AsnTest(_AsnTestCase):
             "table.jsonl": [json.dumps({"CIDR": "192.0.2.0/24", "ASN": 64500})],
         }
 
-        with mock.patch.object(bgptools, "_iter_file_lines", side_effect=lambda path, max_bytes, max_lines: iter(fixtures[path])) as iter_file:
+        with mock.patch.object(
+            bgptools,
+            "_iter_file_lines",
+            side_effect=lambda path, max_bytes, max_lines: iter(fixtures[path]),
+        ) as iter_file:
             bgptools.update()
 
         self.assertEqual(roul.asn.search_asn_name(64500), "Example")
@@ -372,7 +379,10 @@ class AsnTest(_AsnTestCase):
         self.assertEqual(roul.asn.search_asn_name(64501), "new")
 
 
-@unittest.skipUnless(os.environ.get("RUN_CACHED_TESTS") == "1", "NOFETCH: set RUN_CACHED_TESTS=1 to test existing local BGP cache files")
+@unittest.skipUnless(
+    os.environ.get("RUN_CACHED_TESTS") == "1",
+    "NOFETCH: set RUN_CACHED_TESTS=1 to test existing local BGP cache files",
+)
 class CachedAsnIntegrationTest(_AsnTestCase):
     def test_cached_debug_update(self) -> None:
         asn_path = Path("asns.csv")

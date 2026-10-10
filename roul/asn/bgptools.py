@@ -118,13 +118,27 @@ def update() -> None:
         new_table_ipv6 = roul.ip.radix.RadixTree(bit_length=128)
 
         if roul.DEBUG:
-            asn_count = _process_asn_data(_iter_file_lines("asns.csv", _ASN_LIMIT_BYTES, _ASN_RECORD_LIMIT + 1), new_asns)
-            route_count = _process_table_data(_iter_file_lines("table.jsonl", _TABLE_LIMIT_BYTES, _TABLE_RECORD_LIMIT), new_table_ipv4, new_table_ipv6)
+            asn_count = _process_asn_data(
+                _iter_file_lines("asns.csv", _ASN_LIMIT_BYTES, _ASN_RECORD_LIMIT + 1),
+                new_asns,
+            )
+            route_count = _process_table_data(
+                _iter_file_lines("table.jsonl", _TABLE_LIMIT_BYTES, _TABLE_RECORD_LIMIT),
+                new_table_ipv4,
+                new_table_ipv6,
+            )
         else:
             with get(BGP_TOOLS_ASN_URL, headers={"User-Agent": user_agent}, stream=True, timeout=(5, 30)) as response:
-                asn_count = _process_asn_data(_iter_response_lines(response, _ASN_LIMIT_BYTES, _ASN_RECORD_LIMIT + 1), new_asns)
+                asn_count = _process_asn_data(
+                    _iter_response_lines(response, _ASN_LIMIT_BYTES, _ASN_RECORD_LIMIT + 1),
+                    new_asns,
+                )
             with get(BGP_TOOLS_TABLE_URL, headers={"User-Agent": user_agent}, stream=True, timeout=(5, 30)) as response:
-                route_count = _process_table_data(_iter_response_lines(response, _TABLE_LIMIT_BYTES, _TABLE_RECORD_LIMIT), new_table_ipv4, new_table_ipv6)
+                route_count = _process_table_data(
+                    _iter_response_lines(response, _TABLE_LIMIT_BYTES, _TABLE_RECORD_LIMIT),
+                    new_table_ipv4,
+                    new_table_ipv6,
+                )
 
         if not asn_count or not route_count:
             raise ValueError("ASN and routing data must not be empty")
